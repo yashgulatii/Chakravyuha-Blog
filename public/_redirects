@@ -1,0 +1,3 @@
+/rss.xml https://supabase-project.supabase.co/functions/v1/hashnode-feed?format=rss 200
+/api/hashnode-feed https://supabase-project.supabase.co/functions/v1/hashnode-feed 200
+/* /index.html 200

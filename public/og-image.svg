@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#F6F2E8"/>
+  <g fill="none" stroke="#D9D2C3" stroke-width="2">
+    <circle cx="940" cy="315" r="52"/>
+    <circle cx="940" cy="315" r="92"/>
+    <circle cx="940" cy="315" r="132"/>
+    <circle cx="940" cy="315" r="172"/>
+    <circle cx="940" cy="315" r="212"/>
+    <circle cx="940" cy="315" r="252"/>
+    <circle cx="940" cy="315" r="292"/>
+  </g>
+  <text x="82" y="205" fill="#5B544B" font-family="Georgia,serif" font-size="24" font-style="italic">Chakravyuha · Field notes</text>
+  <text x="82" y="318" fill="#1A1714" font-family="Georgia,serif" font-size="58">The formation,</text>
+  <text x="82" y="390" fill="#1A1714" font-family="Georgia,serif" font-size="58">one ring at a time.</text>
+  <text x="84" y="490" fill="#5B544B" font-family="monospace" font-size="18">YASH GULATI  ·  FIELD NOTES</text>
+</svg>

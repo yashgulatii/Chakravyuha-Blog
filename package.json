@@ -1,0 +1,32 @@
+{
+  "name": "chakravyuha-field-notes",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint src",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/jetbrains-mono": "^5.2.6",
+    "@fontsource-variable/newsreader": "^5.2.6",
+    "@tanstack/react-query": "^5.81.5",
+    "dompurify": "^3.2.6",
+    "highlight.js": "^11.11.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-helmet-async": "^3.0.0",
+    "react-router-dom": "^7.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^4.6.0",
+    "oxlint": "^1.0.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
