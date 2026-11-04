@@ -26,6 +26,7 @@
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^4.6.0",
     "oxlint": "^1.0.0",
+    "supabase": "^3.0.0",
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
   }
