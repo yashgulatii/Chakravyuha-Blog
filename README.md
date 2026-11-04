@@ -17,9 +17,9 @@ Copy `.env.example` to `.env.local` and set `VITE_SUPABASE_URL` to the Supabase 
 2. Set `LOVABLE_PREVIEW_ORIGIN` as an Edge Function secret to the exact HTTPS preview origin. The production origin is fixed to `https://blog.chakravyuha.tech`.
 3. Deploy `hashnode-feed`; `supabase/config.toml` disables JWT verification because this is a public, read-only feed.
 4. Set `VITE_SUPABASE_URL` in the static host's build environment.
-5. Build with `VITE_SUPABASE_URL` set. The Vite build narrows the CSP `connect-src` and the `/rss.xml` and `/api/hashnode-feed` rewrites to that exact project origin.
+5. Build with `VITE_SUPABASE_URL` set. The build fails if it is missing, narrows the CSP `connect-src` to that project origin, and configures `/rss.xml` to redirect to the feed function. The production app calls the function URL directly; the `/api/hashnode-feed` Vite proxy is only used during local development.
 
-The function fixes the upstream URL to `https://yashgulatii.hashnode.dev/rss.xml`, parses RSS XML server-side, filters to the normalized `chakravyuha` tag, sanitizes article HTML, and stores the latest successful response in a service-role-only table. It returns that persisted copy on refresh failure. `/rss.xml` is rewritten to the same function with `format=rss`; adding `?tag=ring-1` to either the index or feed applies the same normalized tag filter.
+The function fixes the upstream URL to `https://yashgulatii.hashnode.dev/rss.xml`, parses RSS XML server-side, filters to the normalized `chakravyuha` tag, sanitizes article HTML, and stores the latest successful response in a service-role-only table. It returns that persisted copy on refresh failure. `/rss.xml` redirects to the same function with `format=rss`; adding `?tag=ring-1` to either the index or feed applies the same normalized tag filter.
 
 The feed cache uses a one-hour shared cache lifetime and stale-while-revalidate. The client query remains fresh for ten minutes. To run the edge-function tests with Deno:
 

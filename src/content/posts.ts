@@ -15,9 +15,16 @@ export interface FeedResponse {
   fetchedAt: string
 }
 
-const feedEndpoint = '/api/hashnode-feed'
+const feedEndpoint = import.meta.env.DEV
+  ? '/api/hashnode-feed'
+  : import.meta.env.VITE_SUPABASE_URL
+    ? new URL('/functions/v1/hashnode-feed', import.meta.env.VITE_SUPABASE_URL).toString()
+    : null
 
 export async function fetchPosts(tag?: string, signal?: AbortSignal): Promise<FeedResponse> {
+  if (!feedEndpoint) {
+    throw new Error('VITE_SUPABASE_URL must be set to connect the site to its feed function.')
+  }
   const params = new URLSearchParams()
   if (tag) params.set('tag', tag)
   const response = await fetch(`${feedEndpoint}${params.size ? `?${params}` : ''}`, {

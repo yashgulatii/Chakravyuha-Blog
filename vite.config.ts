@@ -1,9 +1,12 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_')
   const supabaseUrl = env.VITE_SUPABASE_URL
+  if (command === 'build' && !supabaseUrl) {
+    throw new Error('VITE_SUPABASE_URL is required to build the production site.')
+  }
   const parsedSupabaseUrl = supabaseUrl ? new URL(supabaseUrl) : undefined
   if (
     parsedSupabaseUrl &&
