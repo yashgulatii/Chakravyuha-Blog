@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { getEntryNumber, type Post } from '../content/posts'
+import { getDisplayTitle, getEntryNumber, type Post } from '../content/posts'
 import { RingGlyph } from './RingGlyph'
 
 function getRing(tags: string[]) {
@@ -27,7 +27,7 @@ export function EntryRow({
     <Link to={`/posts/${encodeURIComponent(post.slug)}`} className="entry-row">
       <span className="entry-row__number mono">{String(getEntryNumber(post, chronologicalPosition)).padStart(2, '0')}</span>
       <span className="entry-row__copy">
-        <span className="entry-row__title">{post.title}</span>
+        <span className="entry-row__title">{getDisplayTitle(post)}</span>
         {post.brief && <span className="entry-row__brief">{post.brief}</span>}
         <span className="entry-row__meta mono">
           {date} <span aria-hidden="true">·</span> {post.readingMinutes} min read

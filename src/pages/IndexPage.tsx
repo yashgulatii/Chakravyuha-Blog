@@ -36,11 +36,11 @@ export default function IndexPage() {
   return (
     <>
       <Helmet>
-        <title>Field notes — Chakravyuha</title>
+        <title>Field notes | Chakravyuha</title>
         <meta name="description" content="The Chakravyuha field notes: one entry at a time, from the Active Directory purple team lab." />
         <link rel="canonical" href="https://blog.chakravyuha.tech/" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Field notes — Chakravyuha" />
+        <meta property="og:title" content="Field notes | Chakravyuha" />
         <meta property="og:description" content="The Chakravyuha field notes: one entry at a time, from the Active Directory purple team lab." />
         <meta property="og:url" content="https://blog.chakravyuha.tech/" />
         <meta property="og:image" content="https://blog.chakravyuha.tech/og-image.svg" />

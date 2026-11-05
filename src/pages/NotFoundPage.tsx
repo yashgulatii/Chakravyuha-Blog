@@ -6,7 +6,7 @@ export default function NotFoundPage() {
   return (
     <>
       <Helmet>
-        <title>No such entry — Chakravyuha</title>
+        <title>No such entry | Chakravyuha</title>
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <main id="main-content" className="page-main not-found">

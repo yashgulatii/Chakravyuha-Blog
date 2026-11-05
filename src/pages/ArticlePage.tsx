@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import DOMPurify from 'dompurify'
 import { Helmet } from 'react-helmet-async'
 import { Link, useParams } from 'react-router-dom'
-import { fetchPosts, getEntryNumber, orderPosts, type Post } from '../content/posts'
+import { fetchPosts, getDisplayTitle, getEntryNumber, orderPosts, type Post } from '../content/posts'
 import { RingGlyph } from '../components/RingGlyph'
 import NotFoundPage from './NotFoundPage'
 
@@ -274,6 +274,7 @@ function Article({ post, posts }: { post: Post; posts: Post[] }) {
   const previous = index > 0 ? ordered[index - 1] : undefined
   const next = index >= 0 && index < ordered.length - 1 ? ordered[index + 1] : undefined
   const canonical = `https://blog.chakravyuha.tech/posts/${encodeURIComponent(post.slug)}`
+  const title = getDisplayTitle(post)
   const [linkCopyState, setLinkCopyState] = useState<'idle' | 'copied' | 'failed'>('idle')
 
   useEffect(() => {
@@ -306,11 +307,11 @@ function Article({ post, posts }: { post: Post; posts: Post[] }) {
   return (
     <>
       <Helmet>
-        <title>{post.title} — Chakravyuha Field notes</title>
-        <meta name="description" content={post.brief || `${post.title} — field notes from the Chakravyuha lab.`} />
+        <title>{title}</title>
+        <meta name="description" content={post.brief || `${title} - field notes from the Chakravyuha lab.`} />
         <link rel="canonical" href={canonical} />
         <meta property="og:type" content="article" />
-        <meta property="og:title" content={post.title} />
+        <meta property="og:title" content={title} />
         <meta property="og:description" content={post.brief} />
         <meta property="og:url" content={canonical} />
         <meta property="og:image" content="https://blog.chakravyuha.tech/og-image.svg" />
@@ -320,7 +321,7 @@ function Article({ post, posts }: { post: Post; posts: Post[] }) {
         <header className="article-header">
           <div className="article-header__copy">
             <p className="entry-label mono">Entry {number}</p>
-            <h1>{post.title}</h1>
+            <h1>{title}</h1>
             <p className="article-meta mono">
               {new Intl.DateTimeFormat('en', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(post.publishedAt))}
               {' · '}{post.readingMinutes} min read
@@ -334,12 +335,12 @@ function Article({ post, posts }: { post: Post; posts: Post[] }) {
           <nav className="entry-navigation" aria-label="Previous and next entries">
             {previous ? (
               <Link to={`/posts/${encodeURIComponent(previous.slug)}`} rel="prev">
-                <span className="mono">← Previous entry</span><span>{previous.title}</span>
+                <span className="mono">← Previous entry</span><span>{getDisplayTitle(previous)}</span>
               </Link>
             ) : <span />}
             {next && (
               <Link to={`/posts/${encodeURIComponent(next.slug)}`} rel="next">
-                <span className="mono">Next entry →</span><span>{next.title}</span>
+                <span className="mono">Next entry →</span><span>{getDisplayTitle(next)}</span>
               </Link>
             )}
           </nav>

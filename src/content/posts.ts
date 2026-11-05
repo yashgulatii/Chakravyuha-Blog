@@ -38,6 +38,10 @@ export async function fetchPosts(tag?: string, signal?: AbortSignal): Promise<Fe
   return response.json() as Promise<FeedResponse>
 }
 
+export function getDisplayTitle(post: Post) {
+  return post.title.replace(/\s*[—–]\s*/g, ' - ').trim()
+}
+
 export function getEntryNumber(post: Post, chronologicalPosition: number) {
   const match = /^(?:Post|Part)\s*(\d+)/i.exec(post.title)
   return match ? Number(match[1]) : chronologicalPosition
