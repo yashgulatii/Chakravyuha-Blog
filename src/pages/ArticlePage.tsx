@@ -22,6 +22,50 @@ const allowedAttributes = [
   'href', 'src', 'alt', 'title', 'id', 'class', 'target', 'rel', 'loading', 'decoding',
 ]
 
+function convertWikiImages(container: HTMLElement) {
+  container.querySelectorAll('p').forEach((paragraph) => {
+    const children = [...paragraph.childNodes].filter(
+      (node) => node.nodeType !== Node.TEXT_NODE || node.textContent?.trim(),
+    )
+    let alt: string | undefined
+    let source: string | null = null
+
+    if (children.length === 3 && children[1] instanceof HTMLAnchorElement) {
+      const opening = /^!\[\[([^\]]+)\]\]\(\s*$/.exec(children[0].textContent?.trimStart() ?? '')
+      const closing = /^\s*(?:align=(?:"[^"]*"|'[^']*')\s*)?\)$/.test(children[2].textContent ?? '')
+      if (opening && closing) {
+        alt = opening[1].trim()
+        source = children[1].getAttribute('href')
+      }
+    } else if (children.length === 1) {
+      const markdown = /^!\[\[([^\]]+)\]\]\((https?:\/\/[^\s)]+)(?:\s+align=(?:"[^"]*"|'[^']*'))?\)$/
+        .exec(children[0].textContent?.trim() ?? '')
+      if (markdown) {
+        alt = markdown[1].trim()
+        source = markdown[2]
+      }
+    }
+
+    if (!alt || !source) return
+    let imageUrl: URL
+    try {
+      imageUrl = new URL(source, window.location.origin)
+    } catch {
+      return
+    }
+    if (!['https:', 'http:'].includes(imageUrl.protocol)) return
+
+    const image = document.createElement('img')
+    image.src = imageUrl.href
+    image.alt = alt
+    image.loading = 'lazy'
+    image.decoding = 'async'
+    const figure = document.createElement('figure')
+    figure.append(image)
+    paragraph.replaceWith(figure)
+  })
+}
+
 function cleanArticleHtml(html: string) {
   const fragment = DOMPurify.sanitize(html, {
     ALLOWED_TAGS: allowedTags,
@@ -34,6 +78,7 @@ function cleanArticleHtml(html: string) {
   }) as DocumentFragment
   const container = document.createElement('div')
   container.append(fragment)
+  convertWikiImages(container)
 
   container.querySelectorAll('code').forEach((code) => {
     const className = code.getAttribute('class')
@@ -65,11 +110,6 @@ function cleanArticleHtml(html: string) {
       if (!currentFigure) {
         image.replaceWith(figure)
         figure.append(image)
-      }
-      if (!figure.querySelector('figcaption')) {
-        const caption = document.createElement('figcaption')
-        caption.textContent = alt
-        figure.append(caption)
       }
     }
   })

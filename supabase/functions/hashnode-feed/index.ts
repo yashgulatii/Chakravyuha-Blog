@@ -127,7 +127,7 @@ function serializeHtmlNode(node: HtmlNode): string {
 
 export function sanitizePostHtml(source: string) {
   const trimmed = removeAuthorFooter(source)
-  return sanitizeHtml(trimmed, {
+  const sanitized = sanitizeHtml(trimmed, {
     allowedTags: [
       'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'ul', 'ol', 'li',
       'blockquote', 'pre', 'code', 'em', 'strong', 'hr', 'img', 'figure',
@@ -197,6 +197,58 @@ export function sanitizePostHtml(source: string) {
       }),
     },
   })
+  return convertWikiImages(sanitized)
+}
+
+function convertWikiImages(html: string) {
+  const document = parseDocument(html, { decodeEntities: true }) as unknown as { children: HtmlNode[] }
+  function convert(nodes: HtmlNode[]) {
+    for (let index = 0; index < nodes.length; index += 1) {
+      const paragraph = nodes[index]
+      if (paragraph.name !== 'p') {
+        if (paragraph.children) convert(paragraph.children)
+        continue
+      }
+
+      const children = (paragraph.children ?? []).filter(
+        (node) => node.type !== 'text' || (node.data ?? '').trim(),
+      )
+      let alt: string | undefined
+      let source: string | null = null
+      if (children.length === 3 && children[1].name === 'a') {
+        const opening = /^!\[\[([^\]]+)\]\]\(\s*$/.exec(children[0].data?.trimStart() ?? '')
+        const closing = /^\s*(?:align=(?:"[^"]*"|'[^']*')\s*)?\)$/.test(children[2].data ?? '')
+        if (opening && closing) {
+          alt = opening[1].trim()
+          source = safeUrl(children[1].attribs?.href ?? '', UPSTREAM_FEED)
+        }
+      } else if (children.length === 1) {
+        const markdown = /^!\[\[([^\]]+)\]\]\((https?:\/\/[^\s)]+)(?:\s+align=(?:"[^"]*"|'[^']*'))?\)$/
+          .exec(children[0].data?.trim() ?? '')
+        if (markdown) {
+          alt = markdown[1].trim()
+          source = safeUrl(markdown[2], UPSTREAM_FEED)
+        }
+      }
+
+      if (alt && source) {
+        nodes[index] = {
+          type: 'tag',
+          name: 'figure',
+          children: [{
+            type: 'tag',
+            name: 'img',
+            attribs: { src: source, alt, loading: 'lazy', decoding: 'async' },
+            children: [],
+          }],
+        }
+      } else if (paragraph.children) {
+        convert(paragraph.children)
+      }
+    }
+  }
+  convert(document.children)
+  return document.children.map(serializeHtmlNode).join('')
 }
 
 function descriptionText(value: unknown) {

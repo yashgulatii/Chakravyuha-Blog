@@ -56,6 +56,14 @@ Deno.test('keeps safe content links and applies safe external-link attributes', 
   assert(!html.includes('onerror'))
 })
 
+Deno.test('converts linked Hashnode wiki image syntax into an image', () => {
+  const html = sanitizePostHtml(
+    '<p>![[Screenshot.png]](<a href="https://cdn.hashnode.com/screenshot.png">https://cdn.hashnode.com/screenshot.png</a> align="center")</p>',
+  )
+  assertStringIncludes(html, '<figure><img src="https://cdn.hashnode.com/screenshot.png" alt="Screenshot.png" loading="lazy" decoding="async"></figure>')
+  assert(!html.includes('![['))
+})
+
 Deno.test('parses CDATA, namespace content, and normalized categories', () => {
   const feed = parseFeedXml(
     '<?xml version="1.0"?><rss><channel><item><title>Post 0 Opening</title><link>https://yashgulatii.hashnode.dev/post-0-opening</link><pubDate>Fri, 23 Oct 2026 00:00:00 GMT</pubDate><description><![CDATA[Short brief]]></description><content:encoded><![CDATA[<h1>Opening</h1><p>Body text.</p><script>alert(1)</script>]]></content:encoded><category>#Chakravyuha</category><category>ring-1</category><category>#chakravyuha</category></item></channel></rss>',

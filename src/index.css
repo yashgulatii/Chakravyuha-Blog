@@ -2,11 +2,36 @@
 
 * {
   box-sizing: border-box;
+  scrollbar-color: var(--hairline) var(--paper);
+  scrollbar-width: thin;
 }
 
 html {
   scroll-behavior: smooth;
   background: var(--paper);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid var(--paper);
+  border-radius: 999px;
+  background: var(--hairline);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-soft);
+}
+
+::-webkit-scrollbar-button {
+  display: none;
 }
 
 body {
@@ -178,12 +203,10 @@ a:focus-visible {
 
 .tag-filter {
   display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  flex-wrap: wrap;
   gap: 7px 20px;
   padding: 0 0 17px;
   border-bottom: 1px solid var(--hairline);
-  white-space: nowrap;
 }
 
 .tag-filter__tag {
