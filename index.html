@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#F6F2E8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://*.supabase.co; base-uri 'none'; form-action 'none'"
+      content="default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' https://static.cloudflareinsights.com; connect-src 'self' https://*.supabase.co https://cloudflareinsights.com; base-uri 'none'; form-action 'none'"
     />
     <!-- page-meta:start -->
     <title data-rh="true">Field notes | Chakravyuha</title>
@@ -29,6 +29,9 @@
     <!-- page-meta:end -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script src="/theme-init.js"></script>
+    <!-- Cloudflare Web Analytics -->
+    <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "1ca53c984c1f46f08b8f950213b23f06"}'></script>
+    <!-- End Cloudflare Web Analytics -->
   </head>
   <body>
     <div id="root"></div>
